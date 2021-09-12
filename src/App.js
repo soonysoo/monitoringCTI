@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import 'antd/dist/antd.css';
-import { Layout, Menu, Breadcrumb } from 'antd';
+import { Layout,Menu, Breadcrumb } from 'antd';
+import 'antd/dist/antd.css';
 import {
   DesktopOutlined,
   PieChartOutlined,
@@ -8,49 +9,66 @@ import {
   TeamOutlined,
   UserOutlined,
 } from '@ant-design/icons';
+import { Route, Link } from 'react-router-dom';
+import Home from './components/Home.js';
+import Crypto from './components/CTITool_crypto/Crypto.js';
+import Softphone from './components/CTITool_softphone/Softphone.js'
+import Logviewer from './components/CTITool_log/Logviewer.js';
 
-const { Header, Content, Footer, Sider } = Layout;
+
+const { Sider } = Layout;
 const { SubMenu } = Menu;
+
+
+const { Header, Content, Footer } = Layout;
 
 function App() {
   const [collapsed, setCollapsed] = useState(false);
   const onCollapse = (collapsed) => {
-    console.log(collapsed);
-    setCollapsed({collapsed});
+      console.log(collapsed);
+      setCollapsed(collapsed);
   }
+  const [page, setPage] = useState('dashboard');
+  const onSeleted = (e)=>{
+    setPage(e.key);
+    console.log(page);
+ }
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
-    <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
+       <Sider  collapsible collapsed={collapsed} onCollapse={onCollapse}>
       <div className="logo" style={{color : 'white'}}/>ctibridge
       <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
-        <Menu.Item key="1" icon={<PieChartOutlined />}>
+        <Menu.Item key="dashboard" icon={<PieChartOutlined />}>
           Dashboard
         </Menu.Item>
-        {/* <Menu.Item key="2" icon={<DesktopOutlined />}>
-          Admin
-        </Menu.Item> */}
-        <SubMenu key="sub1" icon={<UserOutlined />} title="Admin">
-          <Menu.Item key="3">CTI환경설정</Menu.Item>
-          <Menu.Item key="4">VDN 관리</Menu.Item>
-          <Menu.Item key="5">IVR 관리</Menu.Item>
-          <Menu.Item key="6">CTI서비스 관리</Menu.Item>
-          <Menu.Item key="7">상담사 관리</Menu.Item>
+        <SubMenu key="Admin" icon={<UserOutlined />} title="Admin">
+          <Menu.Item key="cti" onClick={onSeleted}>CTI환경설정</Menu.Item>
+          <Menu.Item key="vdn">VDN 관리</Menu.Item>
+          <Menu.Item key="ivr">IVR 관리</Menu.Item>
+          <Menu.Item key="service">CTI서비스 관리</Menu.Item>
+          <Menu.Item key="agent">상담사 관리</Menu.Item>
         </SubMenu>
        
-        <SubMenu key="sub2" icon={<TeamOutlined />} title="Monitoring">
-          <Menu.Item key="8">CTI서비스 관리</Menu.Item>
-          <Menu.Item key="9">CTI서버 모니터링</Menu.Item>
-          <Menu.Item key="10">CTI서비스 모니터링</Menu.Item>
+        <SubMenu key="Monitoring" icon={<DesktopOutlined />} title="Monitoring">
+          <Menu.Item key="mon_ct">CTI서비스 관리</Menu.Item>
+          <Menu.Item key="mon_ser">CTI서버 모니터링</Menu.Item>
+          <Menu.Item key="mon_svc">CTI서비스 모니터링</Menu.Item>
         </SubMenu>
-        <SubMenu key="sub3" icon={<TeamOutlined />} title="Alarm">
-          <Menu.Item key="11">알람보기</Menu.Item>
-          <Menu.Item key="12">알람통계</Menu.Item>
+        <SubMenu key="Alarm" icon={<TeamOutlined />} title="Alarm">
+          <Menu.Item key="view">알람보기</Menu.Item>
+          <Menu.Item key="stat">알람통계</Menu.Item>
         </SubMenu>
-        <SubMenu key="sub4" icon={<TeamOutlined />} title="CTI Tool">
-          <Menu.Item key="13">암복호화</Menu.Item>
-          <Menu.Item key="14">로그뷰어</Menu.Item>
-          <Menu.Item key="15">Softphone</Menu.Item>
+        <SubMenu key="Tool" icon={<FileOutlined />} title="CTI Tool">
+          <Menu.Item key="crypto">
+            <Link to="/crypto"/>암복호화
+          </Menu.Item>
+          <Menu.Item key="log">
+            <Link to="/logview"/>로그뷰어
+          </Menu.Item>
+          <Menu.Item key="softphone">
+            <Link to="/softphone"/>Softphone
+          </Menu.Item>
         </SubMenu>
       </Menu>
     </Sider>
@@ -61,11 +79,15 @@ function App() {
           <Breadcrumb.Item>User</Breadcrumb.Item>
           <Breadcrumb.Item>Bill</Breadcrumb.Item>
         </Breadcrumb>
-        <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
-          Bill is a cat.
+        <div>
+        {/* <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}> */}
+          <Route path='/' component={Home} exact={true}/>
+          <Route path='/crypto' component={Crypto}/>
+          <Route path='/softphone' component={Softphone}/>
+          <Route path='/logview' component={Logviewer}/>
         </div>
       </Content>
-      <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
+      <Footer style={{ textAlign: 'center' }}>CTIBridge admin ©2021 Created by HansolInticube</Footer>
     </Layout>
   </Layout>
   );
