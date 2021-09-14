@@ -39,7 +39,6 @@ export default function CryptoLog() {
 
       input.click();
       input.onchange=function(event){
-        console.log("ddd");
         processFile(event.target.files[0]);
       }
     }
