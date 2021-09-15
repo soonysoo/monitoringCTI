@@ -15,6 +15,7 @@ import Crypto from './components/tool/crypto/Crypto.js';
 import Softphone from './components/tool//softphone/Softphone.js'
 import Logviewer from './components/tool/logviewer/Logviewer.js';
 import CTIsetting from './components/admin/CTI/CTIsetting.js';
+import VDNsetting from './components/admin/VDN/VDNsetting.js';
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
@@ -47,7 +48,10 @@ function App() {
             <Link to="/admin/CTIsetting/"/>
               CTI환경설정
           </Menu.Item>
-          <Menu.Item key="vdn">VDN 관리</Menu.Item>
+          <Menu.Item key="vdn">
+           <Link to="/admin/vdn/"/>
+            VDN 관리
+          </Menu.Item>
           <Menu.Item key="ivr">IVR 관리</Menu.Item>
         </SubMenu>
        
@@ -86,10 +90,8 @@ function App() {
           <Route path='/tool/softphone' component={Softphone}/>
           <Route path='/tool/logview' component={Logviewer}/>
           <Route path='/admin/CTIsetting' component={CTIsetting}/>
-          <Route path='/admin/vdn' component={Logviewer}/>
+          <Route path='/admin/vdn' component={VDNsetting}/>
           <Route path='/admin/ivr' component={Logviewer}/>
-          <Route path='/admin/agent' component={Logviewer}/>
-          
         </div>
       </Content>
       <Footer style={{ textAlign: 'center' }}>CTIBridge admin ©2021 Created by HansolInticube</Footer>

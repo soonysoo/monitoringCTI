@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import { Button } from 'antd';
 import { DownloadOutlined } from '@ant-design/icons';
+import CTITable from './CTITable.js';
 
-
-
+const kernel = localStorage.getItem('kernel') ?? '';
 
 const CTIsetting = () => {
     const [filepath, setFilepath ] = useState('D:\\CTIBridge\\Cfg\\cfg_kernel.json'); 
     const [size, setSize] = useState('large');
-    const [data, setData] = useState('');
-    const fileopen = () =>{
+    const [data, setData] = useState(kernel);
+    
+    const fileopen = () => {
         let input = document.createElement("input");
         input.type = "file";
         input.accept = "text/plain";
@@ -19,7 +20,7 @@ const CTIsetting = () => {
           processFile(event.target.files[0]);
         }
     }
-    async function processFile(file){
+    const  processFile = (file) => {
         let reader = new FileReader();
         console.log(reader)
         reader.readAsText(file,"UTF-8");
@@ -27,11 +28,9 @@ const CTIsetting = () => {
         reader.onload=  function(){
             console.log('1')
             setData(reader.result);
-            localStorage.setItem('kernel',data);
+            localStorage.setItem('kernel',JSON.stringify(data));
+            console.log(localStorage.getItem('kernel'));
         }
-        console.log('2');
-        
-        
     }
 
     return (
@@ -39,8 +38,8 @@ const CTIsetting = () => {
             <Button onClick={fileopen} type="primary" shape="round" icon={<DownloadOutlined />} size={size} />
             <h4> 파일경로 : {filepath}</h4>
             <div id='output'></div>
-            {data}
-            CTIsetting
+            <CTITable data={data}></CTITable>
+            
         </div>
     );
 };
