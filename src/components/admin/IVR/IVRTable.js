@@ -90,17 +90,17 @@ class IVRTable extends React.Component {
     super(props);
     this.columns = [
       {
-        title: 'VDN',
+        title: 'IVR 채널',
         dataIndex: 'VDN',
         width: '30%',
         editable: false,
       },
       {
-        title: 'monitoring',
+        title: 'monitoring 여부',
         dataIndex: 'monitoring',
       },
       {
-        title: 'operation',
+        title: 'IVR채널 삭제',
         dataIndex: 'operation',
         render: (_, record) =>
           this.state.dataSource.length >= 1 ? (
