@@ -2,17 +2,8 @@ import React, { useState } from 'react';
 import { Table, Input, InputNumber, Popconfirm, Form, Typography } from 'antd';
 
 
-const originData = [];
-const viewData = [];
 
-for (let i = 0; i < 50; i++) {
-  originData.push({
-    key: i.toString(),
-    name: `Edrward ${i}`,
-    age: 32,
-    address: `London Park no. ${i}`,
-  });
-}
+let viewData = [];
 
 const EditableCell = ({
   editing,
@@ -50,22 +41,21 @@ const EditableCell = ({
 };
 
 const CTITable = (props) => {
-  //const [jsonStr, setJsonStr] = useState(props);
-  //setData(localStorage.getItem('kernel'))
-  //console.log(props);
   const jsonData =  JSON.parse(props.data);
   const entry =  Object.entries(jsonData);
   const kernelMap = new Map(entry);
   //console.log(kernelMap);
-
-  kernelMap.forEach(function(v,k){
-    viewData.push({
-      key : k,
-      value : v,
-      desc : '',
-      isChange : false
+  if(!viewData.length){
+    kernelMap.forEach(function(v,k){
+      viewData.push({
+        key : k,
+        value : v,
+        desc : '',
+        isChange : false
+      })
     })
-  })
+  }
+  
   console.log(viewData.length)
   const [form] = Form.useForm();
   const [data, setData] = useState(viewData);
