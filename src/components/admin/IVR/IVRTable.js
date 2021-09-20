@@ -104,7 +104,7 @@ class IVRTable extends React.Component {
         dataIndex: 'operation',
         render: (_, record) =>
           this.state.dataSource.length >= 1 ? (
-            <Popconfirm title="Sure to delete?" onConfirm={() => this.handleDelete(record.key)}>
+            <Popconfirm title="Sure to delete?" onConfirm={() =>{this.handleDelete(record.VDN); console.log(record)}}>
               <a>Delete</a>
             </Popconfirm>
           ) : null,
@@ -153,9 +153,10 @@ class IVRTable extends React.Component {
   }
 
   handleDelete = (key) => {
+    console.log(key);
     const dataSource = [...this.state.dataSource];
     this.setState({
-      dataSource: dataSource.filter((item) => item.key !== key),
+      dataSource: dataSource.filter((item) => item.VDN !== key ),
     });
   };
   handleAdd = () => {
