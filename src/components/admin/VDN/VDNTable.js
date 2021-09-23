@@ -180,10 +180,6 @@ class VDNTable extends React.Component {
         title: 'split',
         dataIndex: 'split',
         key: 'split',
-        filters: [
-          { text: 'London', value: 'London' },
-          { text: 'New York', value: 'New York' },
-        ],
         filteredValue: filteredInfo.split || null,
         onFilter: (value, record) => record.split.includes(value),
         sorter: (a, b) => a.split.length - b.split.length,
@@ -195,8 +191,8 @@ class VDNTable extends React.Component {
         dataIndex: 'check_link',
         key: 'check_link',
         filters: [
-          { text: 'London', value: 'London' },
-          { text: 'New York', value: 'New York' },
+          { text: '주요 VDN', value: '1' },
+          { text: '일반 VDN', value: '0' },
         ],
         filteredValue: filteredInfo.check_link || null,
         onFilter: (value, record) => record.check_link.includes(value),

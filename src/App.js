@@ -17,6 +17,8 @@ import Logviewer from './components/tool/logviewer/Logviewer.js';
 import CTIsetting from './components/admin/CTI/CTIsetting.js';
 import VDNsetting from './components/admin/VDN/VDNsetting.js';
 import IVRsetting from './components/admin/IVR/IVRsetting.js';
+import CTIserver from './components/monitoring/server/CTIserver.js';
+import CTIservice from './components/monitoring/service/CTIservice.js';
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
@@ -60,8 +62,14 @@ function App() {
         </SubMenu>
        
         <SubMenu key="Monitoring" icon={<DesktopOutlined />} title="Monitoring">
-          <Menu.Item key="mon_ct">CTI서비스 관리</Menu.Item>
-          <Menu.Item key="mon_ser">CTI서버 모니터링</Menu.Item>
+          <Menu.Item key="mon_ct">
+           <Link to="/monitoring/service/"/>
+              CTI서비스 관리
+          </Menu.Item>
+          <Menu.Item key="mon_ser">
+            <Link to="/monitoring/server/"/>
+              CTI서버 모니터링
+          </Menu.Item>
         </SubMenu>
         <SubMenu key="Alarm" icon={<TeamOutlined />} title="Alarm">
           <Menu.Item key="view">알람보기</Menu.Item>
@@ -96,6 +104,9 @@ function App() {
           <Route path='/admin/CTIsetting' component={CTIsetting}/>
           <Route path='/admin/vdn' component={VDNsetting}/>
           <Route path='/admin/ivr' component={IVRsetting}/>
+          
+          <Route path='/monitoring/server' component={CTIserver}/>
+          <Route path='/monitoring/service' component={CTIservice}/>
         </div>
       </Content>
       <Footer style={{ textAlign: 'center' }}>CTIBridge admin ©2021 Created by HansolInticube</Footer>

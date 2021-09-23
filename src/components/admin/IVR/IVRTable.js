@@ -104,7 +104,7 @@ class IVRTable extends React.Component {
         dataIndex: 'operation',
         render: (_, record) =>
           this.state.dataSource.length >= 1 ? (
-            <Popconfirm title="Sure to delete?" onConfirm={() =>{this.handleDelete(record.VDN); console.log(record)}}>
+            <Popconfirm title="정말 삭제하시겠습니까?" onConfirm={() =>{this.handleDelete(record.VDN); console.log(record)}}>
               <a>Delete</a>
             </Popconfirm>
           ) : null,
@@ -213,7 +213,7 @@ class IVRTable extends React.Component {
             marginBottom: 16,
           }}
         >
-          Add a row
+          Add IVR채널
         </Button>
         <Table
           components={components}
