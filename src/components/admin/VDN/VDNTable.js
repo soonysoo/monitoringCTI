@@ -20,6 +20,8 @@ class VDNTable extends React.Component {
     searchedColumn: ''
   };
 
+
+
   handleChange = (pagination, filters, sorter) => {
     console.log('Various parameters', pagination, filters, sorter);
     this.setState({
@@ -62,6 +64,54 @@ class VDNTable extends React.Component {
       },
     });
   };
+
+  downloadCSV = () => {
+    const data = this.props.data;
+    const jsonData = JSON.stringify(data);
+    let arrData = JSON.parse(jsonData);
+
+    let CSV = '';
+    CSV += "IVR채널" + '\r\n\n';
+
+    let row = "";
+    console.log(arrData[0])
+    for (let index in arrData[0]) {
+      console.log(index);
+        row += index + ',';
+    }
+    row = row.slice(0, -1);
+    CSV += row + '\r\n';
+
+    for (let i = 0; i < arrData.length; i++) {
+      let row = "";
+      for (let index in arrData[i]) {
+          row += '"' + arrData[i][index] + '",';
+      }
+
+      row.slice(0, row.length - 1);
+      CSV += row + '\r\n';
+    }
+
+    if (CSV == '') {        
+        alert("Invalid data");
+        return;
+    }   
+  
+    let fileName = "MyReport_";
+    fileName += "IVR채널".replace(/ /g,"_");   
+    
+    //Initialize file format you want csv or xls
+    let uri = 'data:text/csv;charset=utf-8,\uFEFF' + encodeURI(CSV);
+    
+    let link = document.createElement("a");    
+    link.href = uri;
+    link.style = "visibility:hidden";
+    link.download = fileName + ".csv";
+    
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
 
   getColumnSearchProps = dataIndex => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
@@ -217,10 +267,11 @@ class VDNTable extends React.Component {
     ];
     return (
       <>
-        <Space style={{ margin: 20 }}>
-          <Button onClick={this.setAgeSort}>Sort age</Button>
-          <Button onClick={this.clearFilters}>Clear filters</Button>
-          <Button onClick={this.clearAll}>Clear filters and sorters</Button>
+        <Space style={{ margin: 15 }}>
+          <Button type="primary" onClick={this.setAgeSort}>Sort age</Button>
+          <Button type="primary" onClick={this.clearFilters}>Clear filters</Button>
+          <Button type="primary" onClick={this.clearAll}>Clear filters and sorters</Button>
+          <Button type="primary" onClick={this.downloadCSV}>download CSV</Button>
         </Space>
         <Table columns={columns} dataSource={vdndata.data} onChange={this.handleChange} />
       </>

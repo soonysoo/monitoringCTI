@@ -1,6 +1,5 @@
 import React from 'react';
 import VDNTable from './VDNTable.js';
-import VDNSearch from './VDNSearch.js';
 
 const vdnData = [{
                     "vdn_no"	  : "16000",
@@ -144,7 +143,6 @@ const VDNsetting = () => {
   
   return (
     <div>
-      <VDNSearch></VDNSearch>
       <VDNTable data={vdnData}></VDNTable>
     </div>
   );
