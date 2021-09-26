@@ -2,11 +2,12 @@ import React, { useContext, useState, useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
 import 'antd/dist/antd.css';
 import '../../../index.css';
-import { Table, Input, Button, Popconfirm, Form } from 'antd';
+import { Table, Input, Modal, Button, Popconfirm, Form } from 'antd';
 const EditableContext = React.createContext(null);
 
 const EditableRow = ({ index, ...props }) => {
   const [form] = Form.useForm();
+  //console.log(props);
   return (
     <Form form={form} component={false}>
       <EditableContext.Provider value={form}>
@@ -88,10 +89,11 @@ const EditableCell = ({
 class IVRTable extends React.Component {
   constructor(props) {
     super(props);
+    
     this.columns = [
       {
         title: 'IVR 채널',
-        dataIndex: 'VDN',
+        dataIndex: 'IVR',
         width: '30%',
         editable: false,
       },
@@ -111,47 +113,48 @@ class IVRTable extends React.Component {
       },
     ];
     this.state = {
+      isModalVisible : false,
       dataSource: [
         {
-          VDN: '1225',
+          IVR: '1225',
           monitoring: 'true'
         },
         {
-          VDN: '1226',
+          IVR: '1226',
           monitoring: 'true'
         },
         {
-          VDN: '1227',
+          IVR: '1227',
           monitoring: 'true'
         },
         {
-          VDN: '1228',
+          IVR: '1228',
           monitoring: 'true'
         },
         {
-          VDN: '1229',
+          IVR: '1229',
           monitoring: 'true'
         },
         {
-          VDN: '1230',
+          IVR: '1230',
           monitoring: 'true'
         },
         {
-          VDN: '1240',
+          IVR: '1240',
           monitoring: 'true'
         },
         {
-          VDN: '1241',
+          IVR: '1241',
           monitoring: 'true'
         },
         {
-          VDN: '1242',
+          IVR: '1242',
           monitoring: 'true'
         },
       ]
     };
   }
-
+ 
   handleDelete = (key) => {
     console.log(key);
     const dataSource = [...this.state.dataSource];
@@ -159,16 +162,41 @@ class IVRTable extends React.Component {
       dataSource: dataSource.filter((item) => item.VDN !== key ),
     });
   };
-  handleAdd = () => {
+  handleAdd = (data) => {
     const { count, dataSource } = this.state;
-    const newData = {
-      VDN: '2000',
-      monitoring: 'true'
-    };
+    console.log(data);
+    
     this.setState({
-      dataSource: [...dataSource, newData],
-      count: count + 1,
+      dataSource: [...dataSource, ...data],
+      count: count +data.length,
     });
+  };
+  showModal = () => {
+    this.setState({
+      isModalVisible : true
+    })
+  };
+  handleOk = () => {
+    const modalData = document.getElementById('modal-ivr').value;
+    console.log(modalData);
+    const startIVR = modalData.split(',')[0];
+    const num = modalData.split(',')[1];
+    const newIVR = [];
+    for(let i=0 ; i < num ; i++){
+      newIVR.push({
+        IVR : startIVR*1+i,
+        monitoring : 'true'
+      });
+    }
+    this.handleAdd(newIVR);
+    this.setState({
+      isModalVisible : false
+    })
+  };
+  handleCancel = () => {
+    this.setState({
+      isModalVisible : false
+    })
   };
   handleSave = (row) => {
     const newData = [...this.state.dataSource];
@@ -206,15 +234,18 @@ class IVRTable extends React.Component {
     });
     return (
       <div>
-        <Button
-          onClick={this.handleAdd}
-          type="primary"
-          style={{
+        <Button style={{
             marginBottom: 16,
-          }}
-        >
-          Add IVR채널
+          }} 
+          type="primary" 
+          onClick={this.showModal}>
+           Add IVR 채널
         </Button>
+        <Modal title="IVR채널 추가" visible={this.state.isModalVisible} onOk={this.handleOk} onCancel={this.handleCancel}>
+        <p>추가할 IVR채널 번호 시작점과 갯수를 입력하세요 </p>
+        <p>ex) 1225, 5 (1225채널부터 5개 더 추가(1225~1229))</p>
+        <Input id='modal-ivr'  placeholder="시작채널, 갯수"/>
+      </Modal>
         <Table
           components={components}
           rowClassName={() => 'editable-row'}
