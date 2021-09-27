@@ -1,13 +1,12 @@
 import React, { useCallback, useState } from 'react';
 //import Button from '@material-ui/core/Button';
-import {Space, Button, Input} from 'antd';
+import {Space, Button, Input, Typography, Row, Col} from 'antd';
 import { makeStyles } from '@material-ui/core/styles';
-
 import TextField from '@material-ui/core/TextField';
 import CryptoJS from 'crypto-js';
-import { LockOutlined, KeyOutlined } from '@ant-design/icons';
-
-
+import { LockOutlined, KeyOutlined, UserOutlined } from '@ant-design/icons';
+const { Text } = Typography;
+const { TextArea } = Input;
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -90,64 +89,76 @@ export default function CryptoPakcet() {
     return (
       <div className="part-crypto-secion"> 
         <form className={classes.crypttext} noValidate autoComplete="off">
+        <div style={{float: "left"}}>
+        KEY :
+        <Input 
+          size="large" 
+          placeholder="key" 
+          value={key} 
+        />
+        
+        <Input 
+          size="large" 
+          placeholder="iv"
+          value={iv}
+          prefix={<UserOutlined />} 
+        />
+        </div>
+          
           <TextField style={{ margin: 17 }} id="outlined-basic" label="key"  placeholder={key} variant="outlined" onChange={onChangeKey}/>
           <TextField style={{ margin: 17 }} id="outlined-basic" label="iv" placeholder={iv} variant="outlined" onChange={onChangeIV}/>
         </form>
+        <div>
+          <Space>
+            <Row style={{width : '100%'}}>
+              <Col  flex="auto">
+                <Input 
+                  style={{width : '400px'}}
+                  size="large" 
+                  placeholder="암호화하거나 복호화할 내용을 입력하세요" 
+                  prefix={<UserOutlined />} 
+                  onChange={onChangeText}
+                />
+              </Col>
+              <Col flex="10px">
+                <Text strong type="warning">{text.length} byte</Text> 
+              </Col>
+            </Row>
+          </Space>
+        </div> 
+        <div>
+          <Space  align="center">
+            <Button 
+            type="primary"
+            onClick={encryptClick}
+            size ="large"
+            icon = {<LockOutlined/>}
+            style={{ margin: 20, width : "100%" }}
+            block
+            >
+              Encrypt
+            </Button>
+            <Button danger
+            type="primary"
+            onClick={decryptClick}
+            size ="large"
+            icon = {<KeyOutlined/>}
+            style={{ margin: 20, width : "100%" }}
+            block
+            >
+              Decrypt
+            </Button>
+          </Space>
+        </div> 
         <div className={classes.root}>
-            <Input placeholder="Basic usage" />
-            <TextField
-            id="standard-full-width"
-            label="input Text"
-            style={{ margin: 30 }}
-            placeholder=""
-            helperText="암호화하거나 복호화할 내용을 입력하세요"
-            fullWidth
-            margin="normal"
-            InputLabelProps={{
-                shrink: true,
-            }}
-            onChange={onChangeText}
-            />
-            <Button disabled>{text.length} byte</Button>
-          
-        </div>
-        <Space >
-          <Button 
-          type="primary"
-          onClick={encryptClick}
-          size ="large"
-          icon = {<LockOutlined/>}
-          style={{ margin: 10, width : "100%" }}
-          block
-          >
-            Encrypt
-          </Button>
-          <Button danger
-          type="primary"
-          onClick={decryptClick}
-          size ="large"
-          icon = {<KeyOutlined/>}
-          style={{ margin: 10, width : "100%" }}
-          block
-          >
-            Decrypt
-          </Button>
-         </Space>
-        <div className={classes.root}>
-            <TextField
-            id="filled-full-width"
-            label="result"
-            style={{ margin: 20 }}
-            placeholder={result}
-            helperText=""
-            fullWidth
-            margin="normal"
-            InputLabelProps={{
-                shrink: true,
-            }}
-            variant="filled"
-            />
-            <Button disabled>{result.length} byte</Button>
+          <TextArea 
+            rows={4}
+            placeholder="암복호화 결과입니다"
+            autoSize={{ minRows: 2, maxRows: 7 }}
+            value ={result}
+          />
+          <Text strong type="warning">{result.length} byte</Text> 
+         
         </div>
       </div>
     );
