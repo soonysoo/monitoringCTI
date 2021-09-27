@@ -1,9 +1,12 @@
 import React from 'react';
+import CTISystem from './CTISystem';
+import TabsCard from './DiskCard';
+
 
 const CTIserver = () => {
     return (
         <div>
-            CTIserver
+            <CTISystem></CTISystem>
         </div>
     );
 };

@@ -234,7 +234,7 @@ class IVRTable extends React.Component {
     return (
       <div>
         <Button style={{
-            marginBottom: 16,
+            margin: 16,
           }} 
           type="primary" 
           onClick={this.showModal}>

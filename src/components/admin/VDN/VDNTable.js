@@ -1,8 +1,10 @@
 import React from 'react';
-import { Table, Input, Button, Space } from 'antd';
+import { Table, Input, Button, Space, Typography } from 'antd';
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
 
+
+const { Text } = Typography;
 
 class VDNTable extends React.Component {
   constructor(props){
@@ -268,10 +270,10 @@ class VDNTable extends React.Component {
     return (
       <>
         <Space style={{ margin: 15 }}>
-          <Button type="primary" onClick={this.setAgeSort}>Sort age</Button>
-          <Button type="primary" onClick={this.clearFilters}>Clear filters</Button>
-          <Button type="primary" onClick={this.clearAll}>Clear filters and sorters</Button>
+          <Button type="primary" onClick={this.setAgeSort}>Add VDN</Button>
+          <Button type="primary" onClick={this.clearFilters}>Delete VDN</Button>
           <Button type="primary" onClick={this.downloadCSV}>download CSV</Button>
+          <Text strong>총 {vdndata.data.length}개</Text>
         </Space>
         <Table columns={columns} dataSource={vdndata.data} onChange={this.handleChange} />
       </>
