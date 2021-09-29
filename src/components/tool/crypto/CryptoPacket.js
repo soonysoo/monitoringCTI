@@ -1,42 +1,12 @@
 import React, { useCallback, useState } from 'react';
-//import Button from '@material-ui/core/Button';
-import {Space, Button, Input, Typography, Row, Col} from 'antd';
-import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
+import { Button, Input, Row, Col, Divider, Typography } from 'antd';
 import CryptoJS from 'crypto-js';
-import { LockOutlined, KeyOutlined, UserOutlined } from '@ant-design/icons';
-const { Text } = Typography;
+import { LockOutlined, KeyOutlined } from '@ant-design/icons';
+const { Text, Title  } = Typography;
 const { TextArea } = Input;
-
-const useStyles = makeStyles((theme) => ({
-  button: {
-    margin: theme.spacing(2),
-    width : 300
-  },
-  root: {
-    display: 'flex',
-    flexWrap: 'wrap',
-  },
-  textField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    width: '25ch',
-  },
-  margin: {
-    margin: theme.spacing(1),
-    
-  },
-  crypttext : {
-    margin: theme.spacing(2),
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    width :'100%'
-  }
-}));
 
 
 export default function CryptoPakcet() {
-    const classes = useStyles();
     const [key, setKey] = useState('4F8ABBD4EE68E655F42146E87D6E4022');
     const [iv, setIv] =useState('32C863027BDDB0C8');
     const [text, setText] =useState('');
@@ -86,80 +56,75 @@ export default function CryptoPakcet() {
     })
 
 
-    return (
+    return (      
       <div className="part-crypto-secion"> 
-        <form className={classes.crypttext} noValidate autoComplete="off">
-        <div style={{float: "left"}}>
-        KEY :
-        <Input 
-          size="large" 
-          placeholder="key" 
-          value={key} 
-        />
-        
-        <Input 
-          size="large" 
-          placeholder="iv"
-          value={iv}
-          prefix={<UserOutlined />} 
-        />
-        </div>
-          
-          <TextField style={{ margin: 17 }} id="outlined-basic" label="key"  placeholder={key} variant="outlined" onChange={onChangeKey}/>
-          <TextField style={{ margin: 17 }} id="outlined-basic" label="iv" placeholder={iv} variant="outlined" onChange={onChangeIV}/>
-        </form>
-        <div>
-          <Space>
-            <Row style={{width : '100%'}}>
-              <Col  flex="auto">
-                <Input 
-                  style={{width : '400px'}}
-                  size="large" 
-                  placeholder="암호화하거나 복호화할 내용을 입력하세요" 
-                  prefix={<UserOutlined />} 
-                  onChange={onChangeText}
-                />
-              </Col>
-              <Col flex="10px">
-                <Text strong type="warning">{text.length} byte</Text> 
-              </Col>
-            </Row>
-          </Space>
-        </div> 
-        <div>
-          <Space  align="center">
-            <Button 
-            type="primary"
-            onClick={encryptClick}
-            size ="large"
-            icon = {<LockOutlined/>}
-            style={{ margin: 20, width : "100%" }}
+      <Divider/>
+      <Title level={4}>KEY / IV </Title>
+        <Row style={{marginBottom:20}}>
+          <Col span={3}>
+            <Text strong>KEY</Text>
+          </Col>
+          <Col span={21}>
+            <Input size="large"  placeholder="key" value={key} 
+              style={{backgroundColor : '#F0F2F5'}}
+            />
+          </Col>
+        </Row> 
+        <Row>
+          <Col span={3}>
+            <Text strong>IV</Text>
+          </Col>
+          <Col span={21}>
+            <Input size="large" placeholder="iv"value={iv}
+              style={{backgroundColor : '#F0F2F5'}}
+            />
+          </Col>
+        </Row> 
+        <Divider />
+        <Title level={4}> 암복호화 </Title>
+        <Row style={{margin:20, marginTop:10}}>
+          <Col span={21}>
+            <Input 
+              size="large" 
+              placeholder="암호화하거나 복호화할 내용을 입력하세요" 
+              onChange={onChangeText}
+            />
+          </Col>  
+          <Col span={3}>
+            <Text strong >{text.length} byte</Text> 
+          </Col>
+        </Row>
+        <Row>
+          <Col style={{ padding: 10}} span={12}>
+            <Button type="primary"  onClick={encryptClick}
+            size ="large"  icon = {<LockOutlined/>}
             block
             >
               Encrypt
             </Button>
-            <Button danger
-            type="primary"
-            onClick={decryptClick}
-            size ="large"
-            icon = {<KeyOutlined/>}
-            style={{ margin: 20, width : "100%" }}
-            block
+          </Col>
+          <Col style={{ padding: 10}}  span={12}>  
+            <Button danger  type="primary" onClick={decryptClick}
+            size="large" icon={<KeyOutlined/>}
+             block
             >
               Decrypt
             </Button>
-          </Space>
-        </div> 
-        <div className={classes.root}>
+          </Col>
+        </Row>    
+        <Row style={{ padding: 10}}>
+          <Col  span={21}>
           <TextArea 
             rows={4}
             placeholder="암복호화 결과입니다"
             autoSize={{ minRows: 2, maxRows: 7 }}
             value ={result}
           />
-          <Text strong type="warning">{result.length} byte</Text> 
-         
-        </div>
-      </div>
+          </Col>
+          <Col span={3}>
+            <Text strong >{result.length} byte</Text> 
+          </Col>
+        </Row>
+      </div> 
     );
   }
