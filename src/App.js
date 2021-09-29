@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import 'antd/dist/antd.css';
 import { Layout,Menu, Breadcrumb } from 'antd';
-import 'antd/dist/antd.css';
 import {
   DesktopOutlined,
   PieChartOutlined,
@@ -19,6 +18,7 @@ import VDNsetting from './components/admin/VDN/VDNsetting.js';
 import IVRsetting from './components/admin/IVR/IVRsetting.js';
 import CTIserver from './components/monitoring/server/CTIserver.js';
 import CTIservice from './components/monitoring/service/CTIservice.js';
+import AlarmMain from './components/alarm/AlarmMain.js';
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
@@ -72,7 +72,9 @@ function App() {
           </Menu.Item>
         </SubMenu>
         <SubMenu key="Alarm" icon={<TeamOutlined />} title="Alarm">
-          <Menu.Item key="view">알람보기</Menu.Item>
+          <Menu.Item key="view">
+            <Link to="/alarm/view"/>알람보기
+          </Menu.Item>
           <Menu.Item key="stat">알람통계</Menu.Item>
         </SubMenu>
         <SubMenu key="Tool" icon={<FileOutlined />} title="CTI Tool">
@@ -104,7 +106,7 @@ function App() {
           <Route path='/admin/CTIsetting' component={CTIsetting}/>
           <Route path='/admin/vdn' component={VDNsetting}/>
           <Route path='/admin/ivr' component={IVRsetting}/>
-          
+          <Route path='/alarm/view' component={AlarmMain}/>
           <Route path='/monitoring/server' component={CTIserver}/>
           <Route path='/monitoring/service' component={CTIservice}/>
         </div>
