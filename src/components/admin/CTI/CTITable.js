@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Table, Input, InputNumber, Popconfirm, Form, Typography } from 'antd';
+import { KernelAPI } from '../API/api';
 
 
 
@@ -41,33 +42,31 @@ const EditableCell = ({
 };
 
 const CTITable = (props) => {
+  console.log( props.data)
   const jsonData =  JSON.parse(props.data);
   const entry =  Object.entries(jsonData);
   const kernelMap = new Map(entry);
-  //console.log(kernelMap);
-  if(!viewData.length){
-    kernelMap.forEach(function(v,k){
-      viewData.push({
-        key : k,
-        value : v,
-        desc : '',
-        isChange : false
-      })
-    })
-  }
-  
-  console.log(viewData.length)
   const [form] = Form.useForm();
   const [data, setData] = useState(viewData);
   const [editingKey, setEditingKey] = useState('');
 
-  const isEditing = (record) => record.key === editingKey;
+  console.log(kernelMap);
+  if(viewData.length <= 0){
+    kernelMap.forEach(function(v,k){
+      viewData.push({
+        key : k,
+        value : v,
+        isChange : false
+      })
+    })
+  }
 
-  const edit = (record) => {
+  const isEditing = (record) => record.key === editingKey;
+  console.log(data);
+  const edit = (record) =>  {
     form.setFieldsValue({
       key: '',
       value: '',
-      desc: '',
       ...record,
     });
     setEditingKey(record.key);
@@ -79,15 +78,20 @@ const CTITable = (props) => {
 
   const save = async (key) => {
     try {
+
       const row = await form.validateFields();
       const newData = [...data];
+      console.log(newData);
       const index = newData.findIndex((item) => key === item.key);
+
+
 
       if (index > -1) {
         const item = newData[index];
         newData.splice(index, 1, { ...item, ...row });
         setData(newData);
         setEditingKey('');
+
       } else {
         newData.push(row);
         setData(newData);
@@ -102,19 +106,13 @@ const CTITable = (props) => {
     {
       title: 'key',
       dataIndex: 'key',
-      width: '25%',
+      width: '40%',
       editable: true,
     },
     {
       title: 'value',
       dataIndex: 'value',
-      width: '15%',
-      editable: true,
-    },
-    {
-      title: 'descrption',
-      dataIndex: 'desc',
-      width: '40%',
+      width: '60%',
       editable: true,
     },
     {
@@ -170,7 +168,7 @@ const CTITable = (props) => {
           },
         }}
         bordered
-        dataSource={data}
+        dataSource={viewData}
         columns={mergedColumns}
         rowClassName="editable-row"
         pagination={{
@@ -180,5 +178,6 @@ const CTITable = (props) => {
     </Form>
   );
 };
+
 
 export default CTITable;

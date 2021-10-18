@@ -48,7 +48,7 @@ export default function CryptoPakcet() {
         iv :_iv,
         mode :CryptoJS.mode.CBC,
         padding : CryptoJS.pad.Pkcs7,
-        format :CryptoJS.format.OpenSSL
+        format :CryptoJS.format.OpenSSL,
       }).toString(CryptoJS.enc.Utf8)
       console.log(result)
       console.log(ecryptdata.toString(CryptoJS.enc.Utf8));
@@ -98,8 +98,7 @@ export default function CryptoPakcet() {
           <Col style={{ padding: 10}} span={12}>
             <Button type="primary"  onClick={encryptClick}
             size ="large"  icon = {<LockOutlined/>}
-            block
-            >
+            block>
               Encrypt
             </Button>
           </Col>

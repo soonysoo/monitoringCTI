@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from 'antd';
 import { DownloadOutlined } from '@ant-design/icons';
 import CTITable from './CTITable.js';
+import { KernelAPI } from '../API/api.js';
 
-const kernel = localStorage.getItem('kernel') ?? '';
+let kernel= '{}';
+
 
 const CTIsetting = () => {
     const [filepath, setFilepath ] = useState('D:\\CTIBridge\\Cfg\\cfg_kernel.json'); 
@@ -20,6 +22,17 @@ const CTIsetting = () => {
           processFile(event.target.files[0]);
         }
     }
+    useEffect(async() =>{
+        const result = await KernelAPI.getKernel();
+        console.log(result);
+        
+        setData(JSON.stringify(result))
+    });
+    // const fetchData = async () =>{
+    //     const response = await KernelAPI.getKernel();
+    //     console.log(response)
+    // }
+
     const  processFile = (file) => {
         let reader = new FileReader();
         console.log(reader)
@@ -28,10 +41,11 @@ const CTIsetting = () => {
         reader.onload=  function(){
             console.log('1')
             setData(reader.result);
-            localStorage.setItem('kernel',JSON.stringify(data));
-            console.log(localStorage.getItem('kernel'));
+           // localStorage.setItem('kernel',JSON.stringify(data));
+           // console.log(localStorage.getItem('kernel'));
         }
     }
+
 
     return (
         <div>
