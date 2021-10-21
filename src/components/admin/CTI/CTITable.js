@@ -1,10 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Table, Input, InputNumber, Popconfirm, Form, Typography } from 'antd';
-import { KernelAPI } from '../API/api';
-
-
-
-let viewData = [];
+import axios from 'axios';
 
 const EditableCell = ({
   editing,
@@ -42,27 +38,27 @@ const EditableCell = ({
 };
 
 const CTITable = (props) => {
-  console.log( props.data)
-  const jsonData =  JSON.parse(props.data);
-  const entry =  Object.entries(jsonData);
-  const kernelMap = new Map(entry);
   const [form] = Form.useForm();
-  const [data, setData] = useState(viewData);
+  const [data, setData] = useState([]);
   const [editingKey, setEditingKey] = useState('');
 
-  console.log(kernelMap);
-  if(viewData.length <= 0){
-    kernelMap.forEach(function(v,k){
-      viewData.push({
-        key : k,
-        value : v,
-        isChange : false
-      })
-    })
-  }
 
+  useEffect(() =>{
+      const fetchKERNEL = async () =>{
+          try{
+              const response = await axios.get('http://127.0.0.1:3040/resource/kernel');
+              console.log(response.data)
+              setData(response.data);         
+          }catch(e){
+              console.log(e);
+          }
+      };
+      fetchKERNEL();
+  },[]);
+
+  
   const isEditing = (record) => record.key === editingKey;
-  console.log(data);
+ 
   const edit = (record) =>  {
     form.setFieldsValue({
       key: '',
@@ -107,7 +103,7 @@ const CTITable = (props) => {
       title: 'key',
       dataIndex: 'key',
       width: '40%',
-      editable: true,
+      editable: false,
     },
     {
       title: 'value',
@@ -123,7 +119,6 @@ const CTITable = (props) => {
         return editable ? (
           <span>
             <a
-              // href="javascript:;"
               onClick={() => save(record.key)}
               style={{
                 marginRight: 8,
@@ -168,7 +163,7 @@ const CTITable = (props) => {
           },
         }}
         bordered
-        dataSource={viewData}
+        dataSource={data}
         columns={mergedColumns}
         rowClassName="editable-row"
         pagination={{
@@ -178,6 +173,7 @@ const CTITable = (props) => {
     </Form>
   );
 };
+
 
 
 export default CTITable;
