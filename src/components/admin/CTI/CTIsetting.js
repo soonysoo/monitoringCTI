@@ -17,11 +17,10 @@ const CTIsetting = () => {
           setFilepath(event.target.files[0])
         }
     }
-
     return (
         <div>
-            <Button onClick={fileopen} type="primary" shape="round" icon={<DownloadOutlined />} size={size} />
-            <h4><b> 현재 파일경로 : {filepath}</b></h4>
+            {/* <Button onClick={fileopen} type="primary" shape="round" icon={<DownloadOutlined />} size={size} /> */}
+            {/* <h4><b> 현재 파일경로 : {filepath}</b></h4> */}
             <div id='output'></div>
             <CTITable ></CTITable>
         </div>

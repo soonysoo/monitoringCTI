@@ -74,21 +74,27 @@ const CTITable = (props) => {
 
   const save = async (key) => {
     try {
-
       const row = await form.validateFields();
       const newData = [...data];
-      console.log(newData);
       const index = newData.findIndex((item) => key === item.key);
-
-
 
       if (index > -1) {
         const item = newData[index];
         newData.splice(index, 1, { ...item, ...row });
+        
+        const key = item.key;
+        const value = row.value;
+        const response = await axios.put('http://127.0.0.1:3040/resource/kernel',
+          {key, value}
+        );
+
+        if(response.statusText !== 'OK'){
+          alert("config를 수정이 실패하였습니다.")
+        }
         setData(newData);
         setEditingKey('');
-
       } else {
+      //인덱스를 못찾은 경우인데 왜있는지; 잘 모르겠음?
         newData.push(row);
         setData(newData);
         setEditingKey('');
