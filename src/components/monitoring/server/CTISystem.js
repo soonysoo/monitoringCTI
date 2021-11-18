@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Col, Typography, Card, Descriptions } from 'antd';
-import SysRingProgress from '../../chart/RingPropgress';
+//import SysRingProgress from '../../chart/RingPropgress';
 import TabsCard from './DiskCard';
 import LiquidChart from '../../chart/LiquidChart';
+import axios from 'axios';
+
+
 
 const { Title } = Typography;
+
 
 const data = {
                 'CPU' :
@@ -27,6 +31,37 @@ const data = {
               }
 
 const CTISystem = () => {
+  const [cpu, setCpu] = useState({});
+  const [disk, setDisk] = useState({});
+  //CPU, MEMORY정보 불러오기
+  useEffect(() =>{
+      const fetchKERNEL = async () =>{
+          try{
+              const response = await axios.get('http://127.0.0.1:3041/util/cpu');
+              console.log(response.data)
+              setCpu(response.data);         
+          }catch(e){
+              console.log(e);
+          }
+      };
+      fetchKERNEL();
+  },[]);
+
+  //DISK정보 불러오기 
+  useEffect(() =>{
+    const fetchKERNEL = async () =>{
+        try{
+            const response = await axios.get('http://127.0.0.1:3041/util/disk');
+            console.log(response.data)
+            setDisk(response.data);         
+        }catch(e){
+            console.log(e);
+        }
+    };
+    fetchKERNEL();
+  },[]);
+
+
   return (
     <>
       <Row>
@@ -43,24 +78,25 @@ const CTISystem = () => {
       <Row  style={{backgroundColor :'white'}}>
         <Col span={8} style={{padding :15}}>
           <Card title="CPU Info" bordered={true}>
-            <LiquidChart percent={data.CPU.usage}></LiquidChart>
+            <LiquidChart percent={cpu.cpuUsage}></LiquidChart>
             <Descriptions style={{paddingTop :20}} size='small' title="" layout="vertical" bordered>
               <Descriptions.Item label="Processor ID">3341</Descriptions.Item>
-              <Descriptions.Item label="Usage(%)">{data.CPU.usage*100}%</Descriptions.Item>
+              <Descriptions.Item label="Usage(%)">{cpu.cpuUsage*100}%</Descriptions.Item>
             </Descriptions>
           </Card>
         </Col>
         <Col span={8} style={{padding :15}}>
           <Card title="Memory Info" bordered={true}>
-            <LiquidChart percent={data.Memory.usage}></LiquidChart>
+            <LiquidChart percent={cpu.memoryPer}></LiquidChart>
             <Descriptions style={{paddingTop :20}} size='small' title="" layout="vertical" bordered>
-              <Descriptions.Item label="Total">{data.Memory.total}GB</Descriptions.Item>
-              <Descriptions.Item label="Usage(%)">{data.Memory.usage*100}%</Descriptions.Item>
+              <Descriptions.Item label="Total">{cpu.totalMemory}GB</Descriptions.Item>
+              <Descriptions.Item label="Usage(%)">{cpu.memoryPer*100}%</Descriptions.Item>
             </Descriptions>
           </Card>
         </Col>
         <Col span={8} style={{padding :15}}>
-          <TabsCard data={data.Disk}></TabsCard>
+          <TabsCard data={disk}></TabsCard>
+          
         </Col>
       </Row>
     </>

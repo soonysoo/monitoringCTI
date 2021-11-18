@@ -1,8 +1,8 @@
 import React from 'react';
-import { Table, Input, Button, Space, Typography } from 'antd';
+import { Table, Input, Button, Space, Typography, Modal, Popconfirm } from 'antd';
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
-
+import axios from 'axios'; 
 
 const { Text } = Typography;
 
@@ -10,19 +10,24 @@ class VDNTable extends React.Component {
   constructor(props){
     super(props);
     console.log(props);
-    //this.data = props;
   }
-  
+
+  componentDidMount(){
+    fetch('http://127.0.0.1:3041/resource/vdn')
+      .then((response) => response.json())
+      .then((data)=> this.setState({...this.state, vdndata : data}));
+  }
 
   state = {
     filteredInfo: null,
     sortedInfo: null,
-    vdndata : this.props,
+    vdndata : [],
     searchText: '',
-    searchedColumn: ''
+    searchedColumn: '',
+    visibleAdd : false,
+    visibleDelete : false,
+    selectedRowKeys :[]
   };
-
-
 
   handleChange = (pagination, filters, sorter) => {
     console.log('Various parameters', pagination, filters, sorter);
@@ -66,9 +71,15 @@ class VDNTable extends React.Component {
       },
     });
   };
+  deleteVDN = () =>{
+    console.log("dfsdd");
+  }
+  handleDelete = () =>{
+
+  }
 
   downloadCSV = () => {
-    const data = this.props.data;
+    const data = this.state.vdndata;
     const jsonData = JSON.stringify(data);
     let arrData = JSON.parse(jsonData);
 
@@ -113,6 +124,13 @@ class VDNTable extends React.Component {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  }
+
+   
+  showModal = () =>{
+    this.setState({
+      visibleAdd : true
+    });
   }
 
   getColumnSearchProps = dataIndex => ({
@@ -185,17 +203,11 @@ class VDNTable extends React.Component {
     sortedInfo = sortedInfo || {};
     filteredInfo = filteredInfo || {};
     vdndata = vdndata || {};
-    console.log(vdndata);
     const columns = [
       {
         title: 'VDN',
         dataIndex: 'vdn_no',
         key: 'vdn_no',
-        // filters: [
-        //   { text: 'Joe', value: 'Joe' },
-        //   { text: 'Jim', value: 'Jim' },
-        // ],
-        //filteredValue: filteredInfo.vdn_no || null,
         onFilter: (value, record) => record.vdn_no.includes(value),
         sorter: (a, b) => a.vdn_no - b.vdn_no,
         sortOrder: sortedInfo.columnKey === 'vdn_no' && sortedInfo.order,
@@ -206,7 +218,6 @@ class VDNTable extends React.Component {
         title: 'monitor',
         dataIndex: 'monitor',
         key: 'monitor',
-        //width: '10%',
         sorter: (a, b) => a.monitor - b.monitor,
         sortOrder: sortedInfo.columnKey === 'monitor' && sortedInfo.order,
         ellipsis: true,
@@ -266,16 +277,61 @@ class VDNTable extends React.Component {
         sortOrder: sortedInfo.columnKey === 'result' && sortedInfo.order,
         ellipsis: true,
       },
+      {
+        title: 'delete',
+        key: 'operation',
+        fixed: 'right',
+        width: 80,
+        render: (record) => {
+
+          return
+          <a onClick={this.deleteVDN}>delete</a>
+        },
+      },
+      {
+        title: 'edit',
+        key: 'operation',
+        fixed: 'right',
+        width: 80,
+        render:(_, record) => {
+          return true ? (
+            
+            <span>
+              <a
+                onClick={(_record) => console.log(record)}
+                style={{
+                  marginRight: 8,
+                }}
+              >
+                delete
+              </a>
+              <Popconfirm title="Sure to cancel?" >
+                <a></a>
+              </Popconfirm>
+            </span>
+          ) : (
+            <Typography.Link >
+              Edit
+            </Typography.Link>
+          );
+        },
+      },
     ];
     return (
       <>
         <Space style={{ margin: 15 }}>
-          <Button type="primary" onClick={this.setAgeSort}>Add VDN</Button>
-          <Button type="primary" onClick={this.clearFilters}>Delete VDN</Button>
+          <Button type="primary" onClick={this.showModal} >Add VDN</Button>
+          <Modal title="VDN 추가"  visible={this.state.visibleAdd} onOk={this.handleAddOK} onCancle={this.handleAddCancle}>
+            <p>추가할 VDN을 입력하세요</p>
+            <p>VDN 번호, Monitoring여부(1), VDN Type, Split 번호, 주요 VDN(1)</p>
+            <p>ex) 1225, 1, 1,,</p>
+            <p>VDN Type (1 : 인입, 2: 상담연결, 3: 인증, 4: 콜백, 5: BSR)</p>
+          </Modal>
+          {/* <Button type="primary" onClick={this.clearFilters}>Delete VDN</Button> */}
           <Button type="primary" onClick={this.downloadCSV}>download CSV</Button>
-          <Text strong>총 {vdndata.data.length}개</Text>
+          <Text strong>총 {vdndata.length}개</Text>
         </Space>
-        <Table columns={columns} dataSource={vdndata.data} onChange={this.handleChange} />
+        <Table columns={columns} dataSource={vdndata} onChange={this.handleChange} />
       </>
     );
   }

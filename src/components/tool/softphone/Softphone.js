@@ -1,10 +1,15 @@
 import React from 'react';
+import DetailView from './DetailView.js';
+import LogView from './LogView.js';
+import Menubar from './Menubar.js';
 
 const Softphone = () => {
     return (
-        <div>
-            소프트폰
-        </div>
+        <>
+            <Menubar></Menubar>
+            <LogView></LogView>
+            <DetailView></DetailView>
+        </>
     );
 };
 

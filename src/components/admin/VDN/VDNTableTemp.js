@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Table, Input, InputNumber, Popconfirm, Form, Typography } from 'antd';
 import axios from 'axios';
+
 
 const EditableCell = ({
   editing,
@@ -37,32 +38,31 @@ const EditableCell = ({
   );
 };
 
-const CTITable = (props) => {
+const VDNTableTemp = () => {
   const [form] = Form.useForm();
   const [data, setData] = useState([]);
   const [editingKey, setEditingKey] = useState('');
-
+  const isEditing = (record) => record.key === editingKey;
 
   useEffect(() =>{
-      const fetchKERNEL = async () =>{
-          try{
-              const response = await axios.get('http://127.0.0.1:3041/resource/kernel');
-              console.log(response.data)
-              setData(response.data);         
-          }catch(e){
-              console.log(e);
-          }
-      };
-      fetchKERNEL();
+    const fetchVDN = async () =>{
+        try{
+            const response = await axios.get('http://127.0.0.1:3041/resource/vdn');
+            console.log(response.data)
+            setData(response.data);         
+        }catch(e){
+            console.log(e);
+        }
+    };
+    fetchVDN();
   },[]);
 
-  
-  const isEditing = (record) => record.key === editingKey;
- 
-  const edit = (record) =>  {
+  const edit = (record) => {
+    console.log("record : "+ record)
     form.setFieldsValue({
-      key: '',
-      value: '',
+      name: '',
+      age: '',
+      address: '',
       ...record,
     });
     setEditingKey(record.key);
@@ -81,20 +81,9 @@ const CTITable = (props) => {
       if (index > -1) {
         const item = newData[index];
         newData.splice(index, 1, { ...item, ...row });
-        
-        const key = item.key;
-        const value = row.value;
-        const response = await axios.put('http://127.0.0.1:3041/resource/kernel',
-          {key, value}
-        );
-
-        if(response.statusText !== 'OK'){
-          alert("config를 수정이 실패하였습니다.")
-        }
         setData(newData);
         setEditingKey('');
       } else {
-      //인덱스를 못찾은 경우인데 왜있는지; 잘 모르겠음?
         newData.push(row);
         setData(newData);
         setEditingKey('');
@@ -103,28 +92,63 @@ const CTITable = (props) => {
       console.log('Validate Failed:', errInfo);
     }
   };
+  const deleteVDN = async (vdn_no) => {
+    try{
+      
+
+
+    }catch(err){
+      console.log('에러가 발생하였습니다.' + err);
+    }
+  }
 
   const columns = [
     {
-      title: 'key',
-      dataIndex: 'key',
-      width: '40%',
+      title: 'VDN',
+      dataIndex: 'vdn_no',
+      width: '15%',
       editable: false,
     },
     {
-      title: 'value',
-      dataIndex: 'value',
-      width: '60%',
+      title: 'Monitoring 여부',
+      dataIndex: 'monitor',
+      width: '10%',
       editable: true,
     },
     {
-      title: 'edit',
-      dataIndex: 'edit',
+      title: 'VDN Type',
+      dataIndex: 'type',
+      width: '10%',
+      editable: true,
+    },
+    {
+      title: 'split',
+      dataIndex: 'split',
+      width: '5%',
+      editable: true,
+    },
+    {
+      title: '주요 VDN',
+      dataIndex: 'check_link',
+      width: '5%',
+      editable: true,
+    },
+    {
+      title: 'Description',
+      dataIndex: 'comment',
+      width: '30%',
+      editable: true,
+    },
+    {
+      title: '수정',
+      dataIndex: 'operation',
       render: (_, record) => {
         const editable = isEditing(record);
+        console.log(record);
         return editable ? (
           <span>
             <a
+              href="javascript:;"
               onClick={() => save(record.key)}
               style={{
                 marginRight: 8,
@@ -141,6 +165,28 @@ const CTITable = (props) => {
             Edit
           </Typography.Link>
         );
+      },
+    },
+    {
+      title: '삭제',
+      dataIndex: 'delete',
+      render: (text, record, index) => {
+        const editable = isEditing(record);
+        console.log(record.vdn_no);
+        console.log(index);
+        return  (
+          <span>
+            <a
+              href="javascript:;"
+              onClick={() => deleteVDN(record.vdn_no)}
+              style={{
+                marginRight: 8,
+              }}
+            >
+             Delete
+            </a>
+          </span>
+        ) 
       },
     },
   ];
@@ -180,6 +226,4 @@ const CTITable = (props) => {
   );
 };
 
-
-
-export default CTITable;
+export default VDNTableTemp;

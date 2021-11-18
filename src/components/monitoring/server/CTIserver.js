@@ -1,10 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import CTISystem from './CTISystem';
-import TabsCard from './DiskCard';
 
 
 const CTIserver = () => {
-    return (
+   return (
         <div>
             <CTISystem></CTISystem>
         </div>

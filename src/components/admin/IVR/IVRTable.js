@@ -89,7 +89,6 @@ const EditableCell = ({
 class IVRTable extends React.Component {
   constructor(props) {
     super(props);
-    
     this.columns = [
       {
         title: 'IVR 채널',
@@ -114,46 +113,17 @@ class IVRTable extends React.Component {
     ];
     this.state = {
       isModalVisible : false,
-      dataSource: [
-        {
-          IVR: '1225',
-          monitoring: 'true'
-        },
-        {
-          IVR: '1226',
-          monitoring: 'true'
-        },
-        {
-          IVR: '1227',
-          monitoring: 'true'
-        },
-        {
-          IVR: '1228',
-          monitoring: 'true'
-        },
-        {
-          IVR: '1229',
-          monitoring: 'true'
-        },
-        {
-          IVR: '1230',
-          monitoring: 'true'
-        },
-        {
-          IVR: '1240',
-          monitoring: 'true'
-        },
-        {
-          IVR: '1241',
-          monitoring: 'true'
-        },
-        {
-          IVR: '1242',
-          monitoring: 'true'
-        },
-      ]
+      dataSource: []
     };
   }
+
+  componentDidMount(){
+    fetch('http://127.0.0.1:3041/resource/ivr')
+      .then((response) => response.json())
+      .then((data)=> this.setState({...this.state, dataSource : data}));
+  }
+
+
  
   handleDelete = (key) => {
     const dataSource = [...this.state.dataSource];
