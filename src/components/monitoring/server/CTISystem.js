@@ -96,7 +96,6 @@ const CTISystem = () => {
         </Col>
         <Col span={8} style={{padding :15}}>
           <TabsCard data={disk}></TabsCard>
-          
         </Col>
       </Row>
     </>

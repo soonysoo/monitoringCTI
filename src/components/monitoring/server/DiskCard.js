@@ -60,8 +60,6 @@ const tabList = [
 class TabsCard extends React.Component {
   constructor(props){
     super(props);
-    //console.log(`props is ${props.data.disk.C}`);
-    //this.props = props.data;
     console.log(props.data);
     console.log(this.props.data);
   }
@@ -71,26 +69,29 @@ class TabsCard extends React.Component {
     Disk : this.props.data,
     loading : false
   };
-  // loadDisk = async () => {
-  //   axios
-  //     .get("http://127.0.0.1:3041/util/disk")
-  //     .then(({ data }) => {
-  //       this.setState({ 
-  //         loading: true,
-  //         Disk: data
-  //       });
-  //     })
-  //     .catch(e => {  // API 호출이 실패한 경우
-  //       console.error(e);  // 에러표시
-  //       this.setState({  
-  //         loading: false
-  //       });
-  //     });
-  // };
+  loadDisk = async () => {
+    axios
+      .get("http://127.0.0.1:3041/util/disk")
+      .then(({ data }) => {
+        this.setState({ 
+          loading: true,
+          Disk: data
+        });
+      })
+      .catch(e => {  // API 호출이 실패한 경우
+        console.error(e);  // 에러표시
+        this.setState({  
+          loading: false
+        });
+      });
+  };
 
-  // async componentWillMount(){
-  //   await this.loadDisk();
-  // }
+  async componentDidMount(){
+    await this.loadDisk();
+    this.setState({ 
+      loading: true
+    });
+  }
 
   onTabChange = (key, type) => {
     console.log(key, type);
@@ -134,51 +135,72 @@ class TabsCard extends React.Component {
   // }
 
   render() {
-    const disk = this.state.Disk;
+    const disk2 = this.state.Disk;
+    const disk  = this.props.data;
     //const tabContent = this.getDiskType(this.state.key);
     //const contenttt  = contentList[this.state.key]
     //console.log(contenttt);
     console.log(disk);
-    //console.log(this.props.data);
-    return (
-       <>
-        {/* <Card
-          style={{ width: '100%' }}
-          title="Disk Info"
-          tabList={tabList}
-          activeTabKey={this.state.key}
-          onTabChange={key => {
-            this.onTabChange(key, 'key');
-          }}
-        >
-        {this.state.key ==='C'?<div>
-        <LiquidChart  percent={disk.C[2]}>article content</LiquidChart>
-          <Descriptions style={{paddingTop :10}} size='small' title="" layout="vertical" bordered>
-            <Descriptions.Item label="Total">{disk.C[0]}GB</Descriptions.Item>
-            <Descriptions.Item label="Available">{disk.C[1]}GB</Descriptions.Item>
-          </Descriptions>
-        </div>:this.state.key ==='D' ?
-          <div>
-          <LiquidChart  percent={disk.D[2]}>app content</LiquidChart>
-          <Descriptions style={{paddingTop :10}} size='small' title="" layout="vertical" bordered>
-            <Descriptions.Item label="Total">{disk.D[0]}GB</Descriptions.Item>
-            <Descriptions.Item label="Available">{disk.D[1]}GB</Descriptions.Item>
-          </Descriptions>
-        </div>
-         :
-         <div> 
-        <LiquidChart  percent={disk.E[2]}>project content</LiquidChart>,
-          <Descriptions style={{paddingTop : 10}} size='small' title="" layout="vertical" bordered>
-            <Descriptions.Item label="Total">{disk.E[0]}GB</Descriptions.Item>
-            <Descriptions.Item label="Available">{disk.E[1]}GB</Descriptions.Item>
-          </Descriptions>
-        </div>
-        }
+    console.log(this.props);
+    console.log(Object.keys(disk).length);
+    if(Object.keys(disk).length ==0){
+      return (
+        <>
+           <Card
+             style={{ width: '100%' }}
+             title="Disk Info"
+             tabList={tabList}
+             activeTabKey={this.state.key}
+             onTabChange={key => {
+               this.onTabChange(key, 'key');
+             }}
+           ></Card>
+        </>
+      )
+    }
 
-        </Card> */}
-      </> 
-    );
+
+    if(Object.keys(disk).length > 0){
+      return (
+        <>
+           <Card
+             style={{ width: '100%' }}
+             title="Disk Info"
+             tabList={tabList}
+             activeTabKey={this.state.key}
+             onTabChange={key => {
+               this.onTabChange(key, 'key');
+             }}
+           >
+           {this.state.key ==='C'?<div>
+           <LiquidChart  percent={disk.C[2]}>article content</LiquidChart>
+             <Descriptions style={{paddingTop :10}} size='small' title="" layout="vertical" bordered>
+               <Descriptions.Item label="Total">{disk.C[0]}GB</Descriptions.Item>
+               <Descriptions.Item label="Available">{disk.C[1]}GB</Descriptions.Item>
+             </Descriptions>
+           </div>:this.state.key ==='D' ?
+             <div>
+             <LiquidChart  percent={disk.D[2]}>app content</LiquidChart>
+             <Descriptions style={{paddingTop :10}} size='small' title="" layout="vertical" bordered>
+               <Descriptions.Item label="Total">{disk.D[0]}GB</Descriptions.Item>
+               <Descriptions.Item label="Available">{disk.D[1]}GB</Descriptions.Item>
+             </Descriptions>
+           </div>
+            :
+            <div> 
+           <LiquidChart  percent={disk.E[2]}>project content</LiquidChart>,
+             <Descriptions style={{paddingTop : 10}} size='small' title="" layout="vertical" bordered>
+               <Descriptions.Item label="Total">{disk.E[0]}GB</Descriptions.Item>
+               <Descriptions.Item label="Available">{disk.E[1]}GB</Descriptions.Item>
+             </Descriptions>
+           </div>
+           }
+           </Card>
+         </> 
+       );
+    }
+    }
   }
-}
+
 
 export default TabsCard;
