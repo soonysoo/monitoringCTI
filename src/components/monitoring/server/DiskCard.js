@@ -6,13 +6,6 @@ import axios from 'axios';
 
 
 
-const diskData = {
-  'C' : [0.34, 351, 40],
-  'D' : [0.5, 39, 6.64],
-  'E' : [0.01, 70, 37.3]
-}
-
-
 const tabList = [
   {
     key: 'C',
@@ -60,8 +53,6 @@ const tabList = [
 class TabsCard extends React.Component {
   constructor(props){
     super(props);
-    console.log(props.data);
-    console.log(this.props.data);
   }
   state = {
     key: 'C',
@@ -69,80 +60,37 @@ class TabsCard extends React.Component {
     Disk : this.props.data,
     loading : false
   };
-  loadDisk = async () => {
-    axios
-      .get("http://127.0.0.1:3041/util/disk")
-      .then(({ data }) => {
-        this.setState({ 
-          loading: true,
-          Disk: data
-        });
-      })
-      .catch(e => {  // API 호출이 실패한 경우
-        console.error(e);  // 에러표시
-        this.setState({  
-          loading: false
-        });
-      });
-  };
+  // loadDisk = async () => {
+  //   axios
+  //     .get("http://127.0.0.1:3041/util/disk")
+  //     .then(({ data }) => {
+  //       this.setState({ 
+  //         loading: true,
+  //         Disk: data
+  //       });
+  //     })
+  //     .catch(e => {  // API 호출이 실패한 경우
+  //       console.error(e);  // 에러표시
+  //       this.setState({  
+  //         loading: false
+  //       });
+  //     });
+  // };
 
-  async componentDidMount(){
-    await this.loadDisk();
-    this.setState({ 
-      loading: true
-    });
-  }
+  // async componentDidMount(){
+  //   await this.loadDisk();
+  //   this.setState({ 
+  //     loading: true
+  //   });
+  // }
 
   onTabChange = (key, type) => {
     console.log(key, type);
     this.setState({ [type]: key });
   };
 
-  // getDiskType(type){
-  //   console.log(type);
-  //   if(type === 'C'){
-  //     return 
-  //       <div>
-  //         <span>dddddddddddd</span>
-  //       <LiquidChart  percent={diskData2[2]}>article content</LiquidChart>
-  //         <Descriptions style={{paddingTop :10}} size='small' title="" layout="vertical" bordered>
-  //           <Descriptions.Item label="Total">{diskData.C[1]}GB</Descriptions.Item>
-  //           <Descriptions.Item label="Available">{diskData.C[2]}GB</Descriptions.Item>
-  //         </Descriptions>
-  //       </div>
-  //   }
-  //   else if(type === 'D')
-  //   {
-  //     return 
-  //     <div>
-  //       <LiquidChart  percent={diskData.D[0]}>app content</LiquidChart>
-  //       <Descriptions style={{paddingTop :10}} size='small' title="" layout="vertical" bordered>
-  //         <Descriptions.Item label="Total">{diskData.D[1]}GB</Descriptions.Item>
-  //         <Descriptions.Item label="Available">{diskData.D[2]}GB</Descriptions.Item>
-  //       </Descriptions>
-  //     </div>
-      
-  //   }else{
-  //    return 
-  //    <div> 
-  //       <LiquidChart  percent={diskData.E[0]}>project content</LiquidChart>,
-  //         <Descriptions style={{paddingTop : 10}} size='small' title="" layout="vertical" bordered>
-  //           <Descriptions.Item label="Total">{diskData.E[1]}GB</Descriptions.Item>
-  //           <Descriptions.Item label="Available">{diskData.E[2]}GB</Descriptions.Item>
-  //         </Descriptions>
-  //       </div>
-  //   }
-  // }
-
   render() {
-    const disk2 = this.state.Disk;
     const disk  = this.props.data;
-    //const tabContent = this.getDiskType(this.state.key);
-    //const contenttt  = contentList[this.state.key]
-    //console.log(contenttt);
-    console.log(disk);
-    console.log(this.props);
-    console.log(Object.keys(disk).length);
     if(Object.keys(disk).length ==0){
       return (
         <>
