@@ -1,8 +1,8 @@
 import { Button } from 'antd';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import CTITable from './CTITable.js';
 import {SettingOutlined, WarningOutlined } from '@ant-design/icons';
-import { Typography, Divider } from 'antd';
+import { Typography } from 'antd';
 
 
 const { Title, Paragraph, Text, Link } = Typography;
@@ -36,9 +36,6 @@ const CTIsetting = () => {
                 <Text code>res_prefix_code</Text> ,  <Text code>res_area_code</Text>, <Text code>res_cleaning_time</Text> 
                 <Text code>res_consult_policy</Text>, <Text code>sock_cti_backup_ip </Text>, <Text code>event_wait_time</Text>, <Text code>log_level </Text>
             </Paragraph>
-                
-            
-            
             <CTITable ></CTITable>
         </div>
     );
