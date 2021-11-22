@@ -72,8 +72,12 @@ class VDNTable extends React.Component {
       },
     });
   };
-  deleteVDN = (vdn) =>{
-    console.log("dfsdd");
+  deleteVDN = async (record) =>{
+    console.log(record);
+    const deleteBool =  window.confirm(`정말 VDN ${record.vdn_no}를 삭제하시겠습니까?`);
+    if(deleteBool){
+      await this.deletehandleVDN(record.vdn_no);
+    }
   }
   hideModal = () => {
     this.setState({
@@ -82,7 +86,6 @@ class VDNTable extends React.Component {
   }
 
    handleAddVDN = async (value) => {
-    console.log("handleAddVDN");
     const vdn_no = document.querySelector('#input_vdn').value;
     const type = this.state.vdnTypeValue;
     const comment = document.querySelector('#input_vdnComment').value;
@@ -96,13 +99,9 @@ class VDNTable extends React.Component {
       comment,
       'result' : '11111'
     }
-    
-    console.log(new_VDN);
-
     await this.postVDN(new_VDN);
-
-
   }
+
   postVDN = async(new_VDN) =>{
     try{
       const response = await axios.post('http://127.0.0.1:3041/resource/VDN', new_VDN);
@@ -111,10 +110,26 @@ class VDNTable extends React.Component {
         visibleAdd : false
       })
     }catch(e){
+        console.log(e.response.status)
+        alert(e.response.data);
         console.log(e);
     }
   };
 
+  deletehandleVDN = async(vdn_id) => {
+    try{
+      const id = vdn_id;
+      console.log(id)
+      const response = await axios.delete(`http://127.0.0.1:3041/resource/VDN/${id}`);
+      this.setState({
+        vdndata : response.data
+      })
+    }catch(e){
+        console.log(e.response.status)
+        alert(e.response.data);
+        console.log(e);
+    }
+  };
   
   downloadCSV = () => {
     const data = this.state.vdndata;
@@ -325,39 +340,11 @@ class VDNTable extends React.Component {
         fixed: 'right',
         width: 80,
         render: (record) => {
-
-          return
-          <a onClick={this.deleteVDN}>delete</a>
+          return(
+            <a onClick={ (_record) => this.deleteVDN(record)}>delete</a>
+          )
         },
-      },
-      {
-        title: 'edit',
-        key: 'operation',
-        fixed: 'right',
-        width: 80,
-        render:(_, record) => {
-          return true ? (
-            
-            <span>
-              <a
-                onClick={(_record) => console.log(record)}
-                style={{
-                  marginRight: 8,
-                }}
-              >
-                delete
-              </a>
-              <Popconfirm title="Sure to cancel?" >
-                <a></a>
-              </Popconfirm>
-            </span>
-          ) : (
-            <Typography.Link >
-              Edit
-            </Typography.Link>
-          );
-        },
-      },
+      }
     ];
     return (
       <>
@@ -377,7 +364,6 @@ class VDNTable extends React.Component {
             <p style={{marginTop:20}}>VDN에 대한 설명</p>
             <Input  id='input_vdnComment'  placeholder="comment"/>
           </Modal>
-          {/* <Button type="primary" onClick={this.clearFilters}>Delete VDN</Button> */}
           <Button type="primary" onClick={this.downloadCSV}>download CSV</Button>
           <Text strong>총 {vdndata.length}개</Text>
         </Space>
