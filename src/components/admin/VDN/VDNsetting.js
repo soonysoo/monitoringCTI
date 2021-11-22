@@ -1,11 +1,11 @@
 import React from 'react';
-import VDNTableTemp from './VDNTableTemp.js';
+import VDNTable from './VDNTable.js';
 
 
 const VDNsetting = () => {
   return (
     <div>
-      <VDNTableTemp></VDNTableTemp>
+      <VDNTable></VDNTable>
     </div>
   );
 };

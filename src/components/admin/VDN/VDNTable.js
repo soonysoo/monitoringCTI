@@ -1,10 +1,11 @@
 import React from 'react';
-import { Table, Input, Button, Space, Typography, Modal, Popconfirm } from 'antd';
+import { Table, Input, Button, Space, Typography, Modal, Popconfirm, Select} from 'antd';
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
 import axios from 'axios'; 
 
 const { Text } = Typography;
+const { Option } = Select;
 
 class VDNTable extends React.Component {
   constructor(props){
@@ -25,8 +26,8 @@ class VDNTable extends React.Component {
     searchText: '',
     searchedColumn: '',
     visibleAdd : false,
-    visibleDelete : false,
-    selectedRowKeys :[]
+    selectedRowKeys :[],
+    vdnTypeValue : 1
   };
 
   handleChange = (pagination, filters, sorter) => {
@@ -71,20 +72,57 @@ class VDNTable extends React.Component {
       },
     });
   };
-  deleteVDN = () =>{
+  deleteVDN = (vdn) =>{
     console.log("dfsdd");
   }
-  handleDelete = () =>{
-
+  hideModal = () => {
+    this.setState({
+      visibleAdd : false
+    });
   }
 
+   handleAddVDN = async (value) => {
+    console.log("handleAddVDN");
+    const vdn_no = document.querySelector('#input_vdn').value;
+    const type = this.state.vdnTypeValue;
+    const comment = document.querySelector('#input_vdnComment').value;
+
+    const new_VDN = {
+      vdn_no,
+      'monitor' : '1',
+      type,
+      'split' : '',
+      'check_link' : '0',
+      comment,
+      'result' : '11111'
+    }
+    
+    console.log(new_VDN);
+
+    await this.postVDN(new_VDN);
+
+
+  }
+  postVDN = async(new_VDN) =>{
+    try{
+      const response = await axios.post('http://127.0.0.1:3041/resource/VDN', new_VDN);
+      this.setState({
+        vdndata : response.data,
+        visibleAdd : false
+      })
+    }catch(e){
+        console.log(e);
+    }
+  };
+
+  
   downloadCSV = () => {
     const data = this.state.vdndata;
     const jsonData = JSON.stringify(data);
     let arrData = JSON.parse(jsonData);
 
     let CSV = '';
-    CSV += "IVR채널" + '\r\n\n';
+    CSV += "VDN정보" + '\r\n\n';
 
     let row = "";
     console.log(arrData[0])
@@ -111,7 +149,7 @@ class VDNTable extends React.Component {
     }   
   
     let fileName = "MyReport_";
-    fileName += "IVR채널".replace(/ /g,"_");   
+    fileName += "VDN 정보".replace(/ /g,"_");   
     
     //Initialize file format you want csv or xls
     let uri = 'data:text/csv;charset=utf-8,\uFEFF' + encodeURI(CSV);
@@ -126,11 +164,15 @@ class VDNTable extends React.Component {
     document.body.removeChild(link);
   }
 
-   
   showModal = () =>{
     this.setState({
       visibleAdd : true
     });
+  }
+  handleChangeVDNType = (value) =>{
+    this.setState({
+      vdnTypeValue : value
+    })
   }
 
   getColumnSearchProps = dataIndex => ({
@@ -321,11 +363,19 @@ class VDNTable extends React.Component {
       <>
         <Space style={{ margin: 15 }}>
           <Button type="primary" onClick={this.showModal} >Add VDN</Button>
-          <Modal title="VDN 추가"  visible={this.state.visibleAdd} onOk={this.handleAddOK} onCancle={this.handleAddCancle}>
+          <Modal title="VDN 추가"  visible={this.state.visibleAdd} onOk={this.handleAddVDN} onCancel={this.hideModal}>
             <p>추가할 VDN을 입력하세요</p>
-            <p>VDN 번호, Monitoring여부(1), VDN Type, Split 번호, 주요 VDN(1)</p>
-            <p>ex) 1225, 1, 1,,</p>
-            <p>VDN Type (1 : 인입, 2: 상담연결, 3: 인증, 4: 콜백, 5: BSR)</p>
+            <Input  id='input_vdn'  placeholder="VDN"/>
+            <p style={{marginTop:20}}>VDN Type을 선택하세요 </p>
+            <Select defaultValue="1" style={{ width: 120 }} onChange={this.handleChangeVDNType}>
+              <Option value="1">인입 VDN</Option>
+              <Option value="2">상담연결 VDN</Option>
+              <Option value="3" >인증 VDN</Option>
+              <Option value="4">콜백 VDN</Option>
+              <Option value="5">BSR VDN</Option>
+            </Select>
+            <p style={{marginTop:20}}>VDN에 대한 설명</p>
+            <Input  id='input_vdnComment'  placeholder="comment"/>
           </Modal>
           {/* <Button type="primary" onClick={this.clearFilters}>Delete VDN</Button> */}
           <Button type="primary" onClick={this.downloadCSV}>download CSV</Button>
