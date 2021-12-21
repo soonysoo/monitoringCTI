@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import 'antd/dist/antd.css';
 import '../../../index.css';
 import { Table, Input, Modal, Button, Popconfirm, Form } from 'antd';
+import axios from 'axios';
 const EditableContext = React.createContext(null);
 
 const EditableRow = ({ index, ...props }) => {
@@ -140,23 +141,66 @@ class IVRTable extends React.Component {
       count: count +data.length,
     });
   };
+  
+  
   showModal = () => {
     this.setState({
       isModalVisible : true
     })
   };
-  handleOk = () => {
+
+  handleAddVDN = async (value) => {
+    const vdn_no = document.querySelector('#input_vdn').value;
+    const type = this.state.vdnTypeValue;
+    const comment = document.querySelector('#input_vdnComment').value;
+
+    const new_VDN = {
+      vdn_no,
+      'monitor' : '1',
+      type,
+      'split' : '',
+      'check_link' : '0',
+      comment,
+      'result' : '11111'
+    }
+    await this.postVDN(new_VDN);
+  }
+
+  postVDN = async() =>{
+    try{
+      const newVDN = document.getElementById('modal-ivr').value;    
+      const response = await axios.post('http://127.0.0.1:3041/resource/ivr',{
+        params: {
+          newVDN: newVDN
+        }
+      });
+      
+      this.setState({
+        vdndata : response.data,
+        visibleAdd : false
+      })
+    }catch(e){
+        console.log(e.response.status)
+        alert(e.response.data);
+        console.log(e);
+    }
+  };
+
+  handleOk = async () => {
     const modalData = document.getElementById('modal-ivr').value;
     console.log(modalData);
     const startIVR = modalData.split(',')[0];
     const num = modalData.split(',')[1];
     const newIVR = [];
+
+
     for(let i=0 ; i < num ; i++){
       newIVR.push({
         IVR : startIVR*1+i,
         monitoring : 'true'
       });
     }
+
     this.handleAdd(newIVR);
     this.setState({
       isModalVisible : false
@@ -210,7 +254,7 @@ class IVRTable extends React.Component {
           onClick={this.showModal}>
            Add IVR 채널
         </Button>
-        <Modal title="IVR채널 추가" visible={this.state.isModalVisible} onOk={this.handleOk} onCancel={this.handleCancel}>
+        <Modal title="IVR채널 추가" visible={this.state.isModalVisible} onOk={this.postVDN} onCancel={this.handleCancel}>
         <p>추가할 IVR채널 번호 시작점과 갯수를 입력하세요 </p>
         <p>ex) 1225, 5 (1225채널부터 5개 더 추가(1225~1229))</p>
         <Input id='modal-ivr'  placeholder="시작채널, 갯수"/>
