@@ -149,24 +149,13 @@ class IVRTable extends React.Component {
     })
   };
 
-  handleAddVDN = async (value) => {
-    const vdn_no = document.querySelector('#input_vdn').value;
-    const type = this.state.vdnTypeValue;
-    const comment = document.querySelector('#input_vdnComment').value;
-
-    const new_VDN = {
-      vdn_no,
-      'monitor' : '1',
-      type,
-      'split' : '',
-      'check_link' : '0',
-      comment,
-      'result' : '11111'
-    }
-    await this.postVDN(new_VDN);
+  handleAddIVR = async () => {
+  
+    const result = await this.postIVR();
+    console.log(result);
   }
 
-  postVDN = async() =>{
+  postIVR = async() =>{
     try{
       const newVDN = document.getElementById('modal-ivr').value;    
       const response = await axios.post('http://127.0.0.1:3041/resource/ivr',{
@@ -174,37 +163,32 @@ class IVRTable extends React.Component {
           newVDN: newVDN
         }
       });
-      
+      console.log(response)
       this.setState({
         vdndata : response.data,
         visibleAdd : false
       })
+
+      if(response.status === 200){
+        return "OK"
+      }
     }catch(e){
-        console.log(e.response.status)
+        //console.log(e.response.status)
         alert(e.response.data);
         console.log(e);
     }
   };
 
   handleOk = async () => {
-    const modalData = document.getElementById('modal-ivr').value;
-    console.log(modalData);
-    const startIVR = modalData.split(',')[0];
-    const num = modalData.split(',')[1];
-    const newIVR = [];
-
-
-    for(let i=0 ; i < num ; i++){
-      newIVR.push({
-        IVR : startIVR*1+i,
-        monitoring : 'true'
-      });
-    }
-
-    this.handleAdd(newIVR);
-    this.setState({
-      isModalVisible : false
-    })
+    const result = await this.postIVR();
+    console.log(result);
+    await  fetch('http://127.0.0.1:3041/resource/ivr')
+            .then((response) => response.json())
+            .then((data)=> this.setState({...this.state, dataSource : data, isModalVisible : false}));
+    
+    // this.setState({
+    //   isModalVisible : false
+    // })
   };
   handleCancel = () => {
     this.setState({
@@ -254,7 +238,7 @@ class IVRTable extends React.Component {
           onClick={this.showModal}>
            Add IVR 채널
         </Button>
-        <Modal title="IVR채널 추가" visible={this.state.isModalVisible} onOk={this.postVDN} onCancel={this.handleCancel}>
+        <Modal title="IVR채널 추가" visible={this.state.isModalVisible} onOk={this.handleOk} onCancel={this.handleCancel}>
         <p>추가할 IVR채널 번호 시작점과 갯수를 입력하세요 </p>
         <p>ex) 1225, 5 (1225채널부터 5개 더 추가(1225~1229))</p>
         <Input id='modal-ivr'  placeholder="시작채널, 갯수"/>
