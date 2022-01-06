@@ -89,12 +89,13 @@ class VDNTable extends React.Component {
     const vdn_no = document.querySelector('#input_vdn').value;
     const type = this.state.vdnTypeValue;
     const comment = document.querySelector('#input_vdnComment').value;
+    const split =  document.querySelector('#input_split').value;
 
     const new_VDN = {
       vdn_no,
       'monitor' : '1',
       type,
-      'split' : '',
+      split,
       'check_link' : '0',
       comment,
       'result' : '11111'
@@ -361,8 +362,11 @@ class VDNTable extends React.Component {
               <Option value="4">콜백 VDN</Option>
               <Option value="5">BSR VDN</Option>
             </Select>
+            <p style={{marginTop:20}}>Split</p>
+            <Input  id='input_split'  placeholder="split"/>
             <p style={{marginTop:20}}>VDN에 대한 설명</p>
             <Input  id='input_vdnComment'  placeholder="comment"/>
+            
           </Modal>
           <Button type="primary" onClick={this.downloadCSV}>download CSV</Button>
           <Text strong>총 {vdndata.length}개</Text>
