@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import CTISystem from './CTISystem';
 
 
 const CTIserver = () => {
    return (
         <div>
-            <CTISystem></CTISystem>
+            <CTISystem ></CTISystem>
         </div>
     );
 };

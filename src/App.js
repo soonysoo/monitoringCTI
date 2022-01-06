@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import 'antd/dist/antd.css';
-import { Layout,Menu, Breadcrumb } from 'antd';
+import { Layout,Menu } from 'antd';
 import {
   DesktopOutlined,
   FileOutlined,
@@ -13,7 +13,7 @@ import CTIsetting from './components/admin/CTI/CTIsetting.js';
 import VDNsetting from './components/admin/VDN/VDNsetting.js';
 import IVRsetting from './components/admin/IVR/IVRsetting.js';
 import CTIserver from './components/monitoring/server/CTIserver.js';
-
+import ErrorCode from './components/tool/errorCode/ErrorCode.js';
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
@@ -64,6 +64,9 @@ function App() {
           </Menu.Item>
         </SubMenu>
         <SubMenu key="Tool" icon={<FileOutlined />} title="CTI Tool">
+          {/* <Menu.Item key="ErrorCode">
+            <Link to="/tool/errorcode"/>에러코드
+          </Menu.Item> */}
           <Menu.Item key="crypto">
             <Link to="/tool/crypto"/>암복호화
           </Menu.Item>
@@ -71,15 +74,18 @@ function App() {
       </Menu>
     </Sider>
     <Layout className="site-layout">
+
       <Header className="site-layout-background" style={{ padding: 0 }} />
+     
       <Content style={{ margin: '0 16px' }}>
         <div>
-          <Route path='/' component={Home} exact={true}/>
+          <Route path='/' component={CTIserver} exact={true}/>
           <Route path='/tool/crypto' component={Crypto}/>
           <Route path='/admin/CTIsetting' component={CTIsetting}/>
           <Route path='/admin/vdn' component={VDNsetting}/>
           <Route path='/admin/ivr' component={IVRsetting}/>
           <Route path='/monitoring/server' component={CTIserver}/>
+          {/* <Route paht='/tool/errorcode' component={ErrorCode}/> */}
         </div>
       </Content>
       <Footer style={{ textAlign: 'center' }}>CTIBridge admin ©2021 Created by HansolInticube</Footer>

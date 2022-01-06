@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react';
 import { Liquid } from '@ant-design/charts';
 
 const LiquidChart= (props) => {

@@ -1,8 +1,6 @@
 import { Card, Descriptions } from 'antd';
 import React from 'react';
-//import SysRingProgress from '../../chart/RingPropgress';
 import LiquidChart from '../../chart/LiquidChart';
-import axios from 'axios';
 
 
 
@@ -91,7 +89,7 @@ class TabsCard extends React.Component {
 
   render() {
     const disk  = this.props.data;
-    if(Object.keys(disk).length ==0){
+    if(Object.keys(disk).length === 0){
       return (
         <>
            <Card

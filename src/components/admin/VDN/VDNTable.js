@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Input, Button, Space, Typography, Modal, Popconfirm, Select} from 'antd';
+import { Table, Input, Button, Space, Typography, Modal, Select} from 'antd';
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
 import axios from 'axios'; 
@@ -137,7 +137,7 @@ class VDNTable extends React.Component {
     let arrData = JSON.parse(jsonData);
 
     let CSV = '';
-    CSV += "VDN정보" + '\r\n\n';
+    CSV += "VDN정보\r\n\n";
 
     let row = "";
     console.log(arrData[0])
@@ -158,7 +158,7 @@ class VDNTable extends React.Component {
       CSV += row + '\r\n';
     }
 
-    if (CSV == '') {        
+    if (CSV === '') {        
         alert("Invalid data");
         return;
     }   

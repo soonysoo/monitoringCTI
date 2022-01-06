@@ -10,25 +10,6 @@ import axios from 'axios';
 const { Title } = Typography;
 
 
-const data = {
-                'CPU' :
-                {
-                  'usage' : 0.64,
-                  'speed' : '2.71GHz'
-                },
-                'Memory' : 
-                {
-                  'total' : '16',
-                  'used' : '10.4',
-                  'usage' : 0.65
-                },
-                'Disk' : 
-                {
-                  'C' : [351, 40],
-                  'D' : [40, 6.77],
-                  'E' : [70, 27.3]
-                }
-              }
 
 const CTISystem = () => {
   const [cpu, setCpu] = useState({});
@@ -45,7 +26,7 @@ const CTISystem = () => {
           }
       };
       fetchKERNEL();
-  },[]);
+  });
 
   //DISK정보 불러오기 
   useEffect(() =>{
@@ -63,7 +44,7 @@ const CTISystem = () => {
 
 
   return (
-    <>
+    <div style={{paddingTop : "20px"}}>
       <Row>
        <Col span={24} 
        style={{backgroundColor :'#294762', color:'white'}}>
@@ -80,7 +61,7 @@ const CTISystem = () => {
           <Card title="CPU Info" bordered={true}>
             <LiquidChart percent={cpu.cpuUsage}></LiquidChart>
             <Descriptions style={{paddingTop :20}} size='small' title="" layout="vertical" bordered>
-              <Descriptions.Item label="Processor ID">3341</Descriptions.Item>
+              <Descriptions.Item label="Processor Name">CTIBridge_SVC</Descriptions.Item>
               <Descriptions.Item label="Usage(%)">{cpu.cpuUsage*100}%</Descriptions.Item>
             </Descriptions>
           </Card>
@@ -98,7 +79,7 @@ const CTISystem = () => {
           <TabsCard data={disk}></TabsCard>
         </Col>
       </Row>
-    </>
+    </div>
   );
 };
 
